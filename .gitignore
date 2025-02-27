@@ -1,0 +1,8 @@
+.dccache
+.env
+.venv
+venv
+static/.webassets-cache
+static/dist
+static/**/*.js
+.vscode

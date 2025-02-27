@@ -1,0 +1,9 @@
+Flask==2.2.5
+paho-mqtt==1.6.1
+python-configuration==0.8.2
+python-dotenv==0.19.2
+gevent==23.9.1
+flask-minify==0.39
+cssmin==0.2.0
+flask-assets==2.0
+requests==2.31.0

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Volume MQTT</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="./static/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./static/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./static/favicon-16x16.png">
+    <link rel="manifest" href="./static/site.webmanifest">
+    <link rel="mask-icon" href="./static/safari-pinned-tab.svg" color="#F77440">
+    <meta name="msapplication-TileColor" content="#222222">
+    <meta name="theme-color" content="#F77440">
+    {% assets "style_bundle" %}
+        <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
+    {% endassets %}
+    {% assets "script_bundle" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}" defer></script>
+    {% endassets %}
+</head>
+<body>
+    <div>
+        <h1>Data Volume MQTT</h1>
+        <div id="message-box"></div>
+        <main>
+            <div class="gauge" id="used-volume-bar">
+                <div class="inner-circle"></div>
+            </div>
+            <div class="gauge-data">
+                <p id="used-volume-text">-1 GB</p>
+                <p id="total-volume-text">999 GB</p>
+                <p id="used-volume-percentage">66,5%</p>
+            </div>
+        </main>
+        <p id="remaining-time-text">2 days 42 hours</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+name: Docker Image CI (ARMv7)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 16
+    - name: Install tsc
+      run: npm install -g typescript
+    - name: Login to Github Packages
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Setup Docker Buildx
+      uses: crazy-max/ghaction-docker-buildx@v3
+      with:
+        buildx-version: latest
+    - name: Get the tag
+      run: echo "vartag=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_ENV
+    - name: Build static files
+      run: tsc
+    - name: Build the Docker image
+      run: |
+        docker buildx build \
+        --file Dockerfile-arm \
+        --tag ghcr.io/tim0-12432/data-volume-mqtt:armv7-${{ env.vartag }} \
+        --platform linux/arm/v7 \
+        --output type=image,push=true .
+    - name: Build the latest Docker image
+      run: |
+        docker buildx build \
+        --file Dockerfile-arm \
+        --tag ghcr.io/tim0-12432/data-volume-mqtt:armv7-latest \
+        --platform linux/arm/v7 \
+        --output type=image,push=true .

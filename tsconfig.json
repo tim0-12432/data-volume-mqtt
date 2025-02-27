@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "lib": [
+            "es2015",
+            "dom"
+        ],
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "declaration": false,
+        "sourceMap": false,
+        "outDir": "./static",
+        "strict": true,
+        "baseUrl": ".",
+        "esModuleInterop": true
+    },
+    "include": [
+        "./typescript/**/*"
+    ],
+}
