@@ -1,13 +1,17 @@
-from flask import Flask, jsonify, render_template
-from flask_minify import Minify
-from flask_assets import Environment, Bundle
 from config import config_from_env, config_from_dict, ConfigurationSet
+from apscheduler.schedulers.background import BackgroundScheduler
+from flask import Flask, jsonify, render_template
+from flask_assets import Environment, Bundle
 from flask.logging import default_handler
 from gevent.pywsgi import WSGIServer
+from flask_minify import Minify
 import paho.mqtt.client as mqtt
 from dotenv import load_dotenv
 import requests
+import datetime
 import logging
+import time
+import json
 
 
 DEFAULT_CONFIG = {
@@ -19,12 +23,13 @@ DEFAULT_CONFIG = {
     # address of mqtt broker
     "mqtt.host": "localhost",
     "mqtt.port": 1883,
+    "mqtt.devicename": "data_volume_mqtt",
 
     # log level for debugging
     "log_level": "WARNING",
 
-    # time intervall in seconds
-    "time_intervall": 60 * 60 * 12,
+    # time interval in seconds
+    "time_interval": 60 * 60 * 12,
 }
 
 PREFIX = "DATA_VOLUME"
@@ -32,13 +37,14 @@ PREFIX = "DATA_VOLUME"
 
 if __name__ == "__main__":
     load_dotenv()
+    uptime = time.time()
 
     cfg = ConfigurationSet(
         config_from_env(prefix=PREFIX, separator="-", lowercase_keys=True),
         config_from_dict(DEFAULT_CONFIG)
     )
     cfg["app.debug"] = str(cfg["app.debug"]).lower() == "true"
-    cfg["time_intervall"] = int(cfg["time_intervall"])
+    cfg["time_interval"] = int(cfg["time_interval"])
 
     logging.basicConfig(level=cfg.log_level, format='%(name)s: %(levelname)s - %(message)s')
     logging.debug("Configuration: %s", cfg)
@@ -74,6 +80,28 @@ if __name__ == "__main__":
         response = requests.get(url)
         data = response.json()
         return data
+    
+    def publish_data():
+        data = fetch_data()
+        time_format = "%Y-%m-%dT%H:%M:%S"
+        sensor_data = {
+            "Time": datetime.datetime.fromtimestamp(time.time()).strftime(time_format),
+            "UsedBytes": data["usedVolume"],
+            "TotalBytes": data["initialVolume"],
+            "RemainingSeconds": data["remainingSeconds"],
+        }
+        state_data = {
+            "Time": datetime.datetime.fromtimestamp(time.time()).strftime(time_format),
+            "Uptime": datetime.datetime.fromtimestamp(time.time() - uptime).strftime("%dT%H:%M:%S"),
+            "UptimeSec": time.time() - uptime,
+            "POWER": "ON"
+        }
+        client.publish(f"tele/{cfg['mqtt.devicename']}/SENSOR", json.dumps(sensor_data), qos=1)
+        client.publish(f"tele/{cfg['mqtt.devicename']}/STATE", json.dumps(state_data), qos=1)
+
+    scheduler = BackgroundScheduler(daemon=True)
+    scheduler.add_job(publish_data, 'interval', seconds=cfg["time_interval"])
+    scheduler.start()
 
     @app.route("/")
     def index():
