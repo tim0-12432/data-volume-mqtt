@@ -27,3 +27,12 @@
 For debugging purposes you can set following environment variables:
 `DATA_VOLUME-LOG_LEVEL=DEBUG` and `DATA_VOLUME-APP-DEBUG=True`
 
+## Why
+
+Especially useful when owning a router that uses LTE connection of Telekom related providers.
+Some of them are:
+
+- Telekom
+- T-Mobile
+- Congstar
+
