@@ -1,5 +1,6 @@
 :root {
     --bg: #c9c9f0;
+    --bg-2: #b0b0e7;
     --text: #222;
     --accent: #F77440;
     --accent-dark: #a74f2c;
@@ -18,6 +19,7 @@
 @media (prefers-color-scheme: dark) {
     :root {
         --bg: #12112C;
+        --bg-2: #24234e;
         --text: #fafafa;
         --bar-bg: #333;
         --error-fg: #ffc8c8;
@@ -163,6 +165,29 @@ main {
     opacity: .5;
 }
 
+#remaining-time-text::marker {
+    padding-right: 1rem;
+}
+
+details > div {
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: .5rem;
+}
+
+details > div > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: .5rem;
+    color: rgb(from var(--text) r g b / 50%);
+}
+
 .gauge-data #used-volume-text {
     font-size: 1.5rem;
     font-weight: bold;
@@ -179,3 +204,30 @@ main {
     font-weight: bold;
 }
 
+.bar {
+    flex-grow: 1;
+    height: 1rem;
+    background-color: var(--bg-2);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+    border-radius: .5rem;
+    overflow: hidden;
+}
+
+.inner-bar {
+    height: 100%;
+    width: var(--percentage);
+    background-color: var(--accent);
+    transition: width .5s ease-in;
+}
+
+.bar > p {
+    position: absolute;
+    top: 50%;
+    right: .3rem;
+    color: var(--text);
+    font-size: .7rem;
+    transform: translateY(-50%);
+}
