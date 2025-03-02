@@ -33,6 +33,36 @@
     }
 }
 
+@media only screen and (max-width: 600px) {
+    :root {
+        --font-size: 12px;
+    }
+}
+
+@media only screen and (min-width: 600px) {
+    :root {
+        --font-size: 16px;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    :root {
+        --font-size: 22px;
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    :root {
+        --font-size: 24px;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    :root {
+        --font-size: 26px;
+    }
+}
+
 * {
     box-sizing: border-box;
     padding: 0;
@@ -45,7 +75,8 @@ html, body {
     background-color: var(--bg);
     color: var(--text);
     font-family: sans-serif;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     font-size: var(--font-size);
     position: relative;
 }
@@ -231,3 +262,59 @@ details > div > div {
     font-size: .7rem;
     transform: translateY(-50%);
 }
+
+footer {
+    margin-top: 3rem;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+footer > p {
+    font-size: .8rem;
+    width: 100%;
+    border-top: 1px solid rgb(from var(--text) r g b / 25%);
+    padding-top: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .2rem;
+}
+
+footer > p > span {
+    color: rgb(from var(--text) r g b / 50%);
+}
+
+footer > p > span > a,
+footer > p > span > a:visited,
+footer > p > span > a:active {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+footer > p > span > a:hover,
+footer > p > span > a:focus {
+    text-decoration: underline;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.8);
+    }
+
+    70% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(0.8);
+    }
+}
+
+footer > p > span.heart {
+    transform: scale(1);
+    animation: pulse 1s infinite;
+    color: var(--accent);
+}
+
